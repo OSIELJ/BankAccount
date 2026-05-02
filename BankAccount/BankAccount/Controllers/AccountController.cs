@@ -1,19 +1,23 @@
 ﻿using BankAccount.Models;
 using BankAccount.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
+using BankAccount.Utils;
 
 namespace BankAccount.Controllers
 {
     public class AccountController : IAccountRepository
     {
-        private List<Account> _accounts = new List<Account>();
+        private List<Account> _accounts;
+
+        public AccountController()
+        {
+            DatabaseSqlite.Initialize();
+            _accounts = DatabaseSqlite.LoadAll();
+        }
 
         public void Create(Account account)
         {
             _accounts.Add(account);
+            DatabaseSqlite.Save(account);
             Console.WriteLine($"\nAccount number {account.Number} created successfully!");
         }
 
@@ -39,6 +43,7 @@ namespace BankAccount.Controllers
             var index = _accounts.FindIndex(a => a.Number == account.Number);
             if (index < 0) { Console.WriteLine("Account not found."); return; }
             _accounts[index] = account;
+            DatabaseSqlite.Save(account);
             Console.WriteLine("Account updated successfully!");
         }
 
@@ -47,6 +52,7 @@ namespace BankAccount.Controllers
             var account = FindByNumber(number);
             if (account == null) { Console.WriteLine("Account not found."); return; }
             _accounts.Remove(account);
+            DatabaseSqlite.Delete(number);
             Console.WriteLine("Account deleted successfully!");
         }
 
@@ -55,6 +61,7 @@ namespace BankAccount.Controllers
             var account = FindByNumber(number);
             if (account == null) { Console.WriteLine("Account not found."); return false; }
             bool success = account.Withdraw(amount);
+            if (success) DatabaseSqlite.Save(account);
             Console.WriteLine(success ? "Withdraw successful!" : "Insufficient balance.");
             return success;
         }
@@ -64,6 +71,7 @@ namespace BankAccount.Controllers
             var account = FindByNumber(number);
             if (account == null) { Console.WriteLine("Account not found."); return false; }
             bool success = account.Deposit(amount);
+            if (success) DatabaseSqlite.Save(account);
             Console.WriteLine(success ? "Deposit successful!" : "Invalid amount.");
             return success;
         }
@@ -77,6 +85,8 @@ namespace BankAccount.Controllers
             if (!origin.Withdraw(amount))
             { Console.WriteLine("Insufficient balance."); return false; }
             destiny.Deposit(amount);
+            DatabaseSqlite.Save(origin);
+            DatabaseSqlite.Save(destiny);
             Console.WriteLine("Transfer successful!");
             return true;
         }
