@@ -19,6 +19,7 @@ while (running)
     Colors.Yellow("  6 - Withdraw");
     Colors.Yellow("  7 - Transfer");
     Colors.Yellow("  8 - Delete Account");
+    Colors.Yellow("  9 - Update Account");
     Colors.Red("\n  0 - Exit");
     Colors.White("\n  Choose an option: ");
 
@@ -101,6 +102,25 @@ while (running)
             Console.Write("Account number: ");
             int delNum = int.TryParse(Console.ReadLine(), out var deln) ? deln : 0;
             controller.Delete(delNum);
+            break;
+
+        case "9":
+            Console.Clear();
+            Colors.Cyan("=== Update Account ===");
+            Console.Write("Account number: ");
+            int updNum = int.TryParse(Console.ReadLine(), out var un) ? un : 0;
+            var updAccount = controller.FindByNumber(updNum);
+            if (updAccount == null)
+            {
+                Colors.Red("Account not found.");
+                break;
+            }
+            Colors.Green(updAccount.ToString()!);
+            Console.Write("\nNew owner name (Enter to keep): ");
+            string newOwner = Console.ReadLine() ?? "";
+            if (!string.IsNullOrWhiteSpace(newOwner))
+                updAccount.Owner = newOwner;
+            controller.Update(updAccount);
             break;
 
         case "0":
