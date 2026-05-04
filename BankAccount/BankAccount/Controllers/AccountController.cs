@@ -12,8 +12,9 @@ namespace BankAccount.Controllers
         {
             DatabaseSqlite.Initialize();
             _accounts = DatabaseSqlite.LoadAll();
+            if (_accounts.Count > 0)
+                Account.SetNextNumber(_accounts.Max(a => a.Number) + 1);
         }
-
         public void Create(Account account)
         {
             _accounts.Add(account);

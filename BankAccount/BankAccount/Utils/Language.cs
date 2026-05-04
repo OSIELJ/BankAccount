@@ -149,6 +149,13 @@
             ? "Nenhuma conta encontrada."
             : "No accounts found.";
 
+        public static string ConfirmDelete => Current == AppLanguage.PTBR
+            ? "\nConfirmar exclusão? (S/N): "
+            : "\nConfirm deletion? (Y/N): ";
+        public static string DeleteCancelled => Current == AppLanguage.PTBR
+            ? "Exclusão cancelada."
+            : "Deletion cancelled.";
+
         // Language selection
         public static string SelectLanguage => Current == AppLanguage.PTBR
             ? "=== Selecionar Idioma ==="

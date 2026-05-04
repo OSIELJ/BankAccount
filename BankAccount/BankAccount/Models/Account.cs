@@ -7,6 +7,16 @@ namespace BankAccount.Models
         // Attributes
         private static int _nextNumber = 1;
 
+        public static void SetNextNumber(int next)
+        {
+            _nextNumber = next;
+        }
+
+        public void SetNumber(int number)
+        {
+            Number = number;
+        }
+
         public int Number { get; private set; }
         public string Owner { get; set; }
         public decimal Balance { get; protected set; }
