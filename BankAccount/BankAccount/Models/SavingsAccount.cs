@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BankAccount.Utils;
 
 namespace BankAccount.Models
 {
     public class SavingsAccount : Account
     {
-        // Attributes
         public int Anniversary { get; set; }
 
-        // Constructor
         public SavingsAccount(string owner, decimal initialBalance, int anniversary = 30)
             : base(owner, initialBalance, 2)
         {
@@ -18,7 +14,9 @@ namespace BankAccount.Models
 
         public override string ToString()
         {
-            return $"{base.ToString()} | Anniversary: {Anniversary} days";
+            return Language.Current == AppLanguage.PTBR
+                ? $"{base.ToString()} | Aniversário: {Anniversary} dias"
+                : $"{base.ToString()} | Anniversary: {Anniversary} days";
         }
     }
 }

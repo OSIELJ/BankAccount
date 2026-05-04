@@ -73,9 +73,10 @@ namespace BankAccount.Utils
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                int type = reader.GetInt32(3);
+                int number = reader.GetInt32(0);
                 string owner = reader.GetString(1);
                 decimal balance = (decimal)reader.GetDouble(2);
+                int type = reader.GetInt32(3);
                 decimal limit = (decimal)reader.GetDouble(4);
                 int anniversary = reader.GetInt32(5);
 
@@ -83,6 +84,7 @@ namespace BankAccount.Utils
                     ? new CheckingAccount(owner, balance, limit)
                     : new SavingsAccount(owner, balance, anniversary);
 
+                account.SetNumber(number);
                 accounts.Add(account);
             }
 

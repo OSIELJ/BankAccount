@@ -71,9 +71,13 @@ while (running)
             Colors.Cyan(Language.Deposit);
             Console.Write(Language.AccountNumber);
             int depNum = int.TryParse(Console.ReadLine(), out var dn) ? dn : 0;
+            var depAcc = controller.FindByNumber(depNum);
+            if (depAcc == null) { Colors.Red(Language.AccountNotFound); break; }
+            Colors.Yellow(depAcc.ToString()!);
             Console.Write(Language.Amount);
             decimal depAmt = decimal.TryParse(Console.ReadLine(), out var da) ? da : 0;
-            controller.Deposit(depNum, depAmt);
+            if (controller.Deposit(depNum, depAmt))
+                Colors.Green(controller.FindByNumber(depNum)!.ToString()!);
             break;
 
         case "6":
@@ -81,9 +85,13 @@ while (running)
             Colors.Cyan(Language.Withdraw);
             Console.Write(Language.AccountNumber);
             int witNum = int.TryParse(Console.ReadLine(), out var wn) ? wn : 0;
+            var witAcc = controller.FindByNumber(witNum);
+            if (witAcc == null) { Colors.Red(Language.AccountNotFound); break; }
+            Colors.Yellow(witAcc.ToString()!);
             Console.Write(Language.Amount);
             decimal witAmt = decimal.TryParse(Console.ReadLine(), out var wa) ? wa : 0;
-            controller.Withdraw(witNum, witAmt);
+            if (controller.Withdraw(witNum, witAmt))
+                Colors.Green(controller.FindByNumber(witNum)!.ToString()!);
             break;
 
         case "7":
@@ -91,11 +99,21 @@ while (running)
             Colors.Cyan(Language.Transfer);
             Console.Write(Language.OriginAccount);
             int oriNum = int.TryParse(Console.ReadLine(), out var on) ? on : 0;
+            var oriAcc = controller.FindByNumber(oriNum);
+            if (oriAcc == null) { Colors.Red(Language.AccountNotFound); break; }
+            Colors.Yellow(oriAcc.ToString()!);
             Console.Write(Language.DestinyAccount);
             int desNum = int.TryParse(Console.ReadLine(), out var den) ? den : 0;
+            var desAcc = controller.FindByNumber(desNum);
+            if (desAcc == null) { Colors.Red(Language.AccountNotFound); break; }
+            Colors.Yellow(desAcc.ToString()!);
             Console.Write(Language.Amount);
             decimal traAmt = decimal.TryParse(Console.ReadLine(), out var ta) ? ta : 0;
-            controller.Transfer(oriNum, desNum, traAmt);
+            if (controller.Transfer(oriNum, desNum, traAmt))
+            {
+                Colors.Yellow(controller.FindByNumber(oriNum)!.ToString()!);
+                Colors.Green(controller.FindByNumber(desNum)!.ToString()!);
+            }
             break;
 
         case "8":
@@ -103,7 +121,19 @@ while (running)
             Colors.Cyan(Language.DeleteAccount);
             Console.Write(Language.AccountNumber);
             int delNum = int.TryParse(Console.ReadLine(), out var deln) ? deln : 0;
-            controller.Delete(delNum);
+            var accToDelete = controller.FindByNumber(delNum);
+            if (accToDelete == null)
+            {
+                Colors.Red(Language.AccountNotFound);
+                break;
+            }
+            Colors.Yellow(accToDelete.ToString()!);
+            Console.Write(Language.ConfirmDelete);
+            string confirm = Console.ReadLine() ?? "";
+            if (confirm.ToUpper() == "S" || confirm.ToUpper() == "Y")
+                controller.Delete(delNum);
+            else
+                Colors.Red(Language.DeleteCancelled);
             break;
 
         case "9":
@@ -123,6 +153,7 @@ while (running)
             if (!string.IsNullOrWhiteSpace(newOwner))
                 updAccount.Owner = newOwner;
             controller.Update(updAccount);
+            Colors.Green(updAccount.ToString()!);
             break;
 
         case "L":
