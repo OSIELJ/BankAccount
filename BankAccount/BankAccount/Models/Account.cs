@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using BankAccount.Utils;
 
 namespace BankAccount.Models
 {
@@ -13,7 +10,7 @@ namespace BankAccount.Models
         public int Number { get; private set; }
         public string Owner { get; set; }
         public decimal Balance { get; protected set; }
-        public int Type { get; protected set; } 
+        public int Type { get; protected set; }
 
         // Constructor
         protected Account(string owner, decimal initialBalance, int type)
@@ -41,8 +38,13 @@ namespace BankAccount.Models
 
         public override string ToString()
         {
-            return $"Account: {Number} | Owner: {Owner} | " +
-                   $"Balance: {Balance:C} | Type: {(Type == 1 ? "Checking" : "Savings")}";
+            string type = Type == 1
+                ? (Language.Current == AppLanguage.PTBR ? "Corrente" : "Checking")
+                : (Language.Current == AppLanguage.PTBR ? "Poupança" : "Savings");
+
+            return Language.Current == AppLanguage.PTBR
+                ? $"Conta: {Number} | Titular: {Owner} | Saldo: {Balance:C} | Tipo: {type}"
+                : $"Account: {Number} | Owner: {Owner} | Balance: {Balance:C} | Type: {type}";
         }
     }
 }
