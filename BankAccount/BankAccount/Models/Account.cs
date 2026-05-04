@@ -4,34 +4,26 @@ namespace BankAccount.Models
 {
     public abstract class Account
     {
-        // Attributes
         private static int _nextNumber = 1;
 
-        public static void SetNextNumber(int next)
-        {
-            _nextNumber = next;
-        }
-
-        public void SetNumber(int number)
-        {
-            Number = number;
-        }
+        public static void SetNextNumber(int next) => _nextNumber = next;
+        public void SetNumber(int number) => Number = number;
 
         public int Number { get; private set; }
+        public string Agency { get; set; }
         public string Owner { get; set; }
         public decimal Balance { get; protected set; }
         public int Type { get; protected set; }
 
-        // Constructor
-        protected Account(string owner, decimal initialBalance, int type)
+        protected Account(string owner, decimal initialBalance, int type, string agency = "001")
         {
             Number = _nextNumber++;
+            Agency = agency;
             Owner = owner;
             Balance = initialBalance;
             Type = type;
         }
 
-        // Methods
         public virtual bool Deposit(decimal amount)
         {
             if (amount <= 0) return false;
@@ -53,8 +45,8 @@ namespace BankAccount.Models
                 : (Language.Current == AppLanguage.PTBR ? "Poupança" : "Savings");
 
             return Language.Current == AppLanguage.PTBR
-                ? $"Conta: {Number} | Titular: {Owner} | Saldo: {Balance:C} | Tipo: {type}"
-                : $"Account: {Number} | Owner: {Owner} | Balance: {Balance:C} | Type: {type}";
+                ? $"Conta: {Number} | Agência: {Agency} | Titular: {Owner} | Saldo: {Balance:C} | Tipo: {type}"
+                : $"Account: {Number} | Agency: {Agency} | Owner: {Owner} | Balance: {Balance:C} | Type: {type}";
         }
     }
 }

@@ -108,6 +108,35 @@
         public static string NewOwnerName => Current == AppLanguage.PTBR
             ? "\nNovo nome do titular (Enter para manter): "
             : "\nNew owner name (Enter to keep): ";
+        public static string AgencyNumber => Current == AppLanguage.PTBR
+            ? "Número da agência (ex: 001): "
+            : "Agency number (ex: 001): ";
+
+        // Confirms
+        public static string ConfirmCreate => Current == AppLanguage.PTBR
+            ? "\nConfirmar criação? (S/N): "
+            : "\nConfirm creation? (Y/N): ";
+        public static string ConfirmDeposit => Current == AppLanguage.PTBR
+            ? "\nConfirmar depósito? (S/N): "
+            : "\nConfirm deposit? (Y/N): ";
+        public static string ConfirmWithdraw => Current == AppLanguage.PTBR
+            ? "\nConfirmar saque? (S/N): "
+            : "\nConfirm withdraw? (Y/N): ";
+        public static string ConfirmTransfer => Current == AppLanguage.PTBR
+            ? "\nConfirmar transferência? (S/N): "
+            : "\nConfirm transfer? (Y/N): ";
+        public static string ConfirmUpdate => Current == AppLanguage.PTBR
+            ? "\nConfirmar atualização? (S/N): "
+            : "\nConfirm update? (Y/N): ";
+        public static string ConfirmDelete => Current == AppLanguage.PTBR
+            ? "\nConfirmar exclusão? (S/N): "
+            : "\nConfirm deletion? (Y/N): ";
+        public static string OperationCancelled => Current == AppLanguage.PTBR
+            ? "Operação cancelada."
+            : "Operation cancelled.";
+        public static string DeleteCancelled => Current == AppLanguage.PTBR
+            ? "Exclusão cancelada."
+            : "Deletion cancelled.";
 
         // Success messages
         public static string AccountCreated => Current == AppLanguage.PTBR
@@ -148,13 +177,6 @@
         public static string NoAccounts => Current == AppLanguage.PTBR
             ? "Nenhuma conta encontrada."
             : "No accounts found.";
-
-        public static string ConfirmDelete => Current == AppLanguage.PTBR
-            ? "\nConfirmar exclusão? (S/N): "
-            : "\nConfirm deletion? (Y/N): ";
-        public static string DeleteCancelled => Current == AppLanguage.PTBR
-            ? "Exclusão cancelada."
-            : "Deletion cancelled.";
 
         // Language selection
         public static string SelectLanguage => Current == AppLanguage.PTBR

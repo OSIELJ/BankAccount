@@ -16,6 +16,7 @@ namespace BankAccount.Utils
             command.CommandText = @"
                 CREATE TABLE IF NOT EXISTS Accounts (
                     Number      INTEGER PRIMARY KEY,
+                    Agency      TEXT NOT NULL DEFAULT '001',
                     Owner       TEXT NOT NULL,
                     Balance     REAL NOT NULL,
                     Type        INTEGER NOT NULL,
@@ -23,6 +24,14 @@ namespace BankAccount.Utils
                     Anniversary INTEGER NOT NULL DEFAULT 0
                 );";
             command.ExecuteNonQuery();
+
+            try
+            {
+                var alter = connection.CreateCommand();
+                alter.CommandText = "ALTER TABLE Accounts ADD COLUMN Agency TEXT NOT NULL DEFAULT '001';";
+                alter.ExecuteNonQuery();
+            }
+            catch { }
         }
 
         public static void Save(Account account)
@@ -33,11 +42,12 @@ namespace BankAccount.Utils
             var command = connection.CreateCommand();
             command.CommandText = @"
                 INSERT OR REPLACE INTO Accounts 
-                    (Number, Owner, Balance, Type, [Limit], Anniversary)
+                    (Number, Agency, Owner, Balance, Type, [Limit], Anniversary)
                 VALUES 
-                    ($number, $owner, $balance, $type, $limit, $anniversary);";
+                    ($number, $agency, $owner, $balance, $type, $limit, $anniversary);";
 
             command.Parameters.AddWithValue("$number", account.Number);
+            command.Parameters.AddWithValue("$agency", account.Agency);
             command.Parameters.AddWithValue("$owner", account.Owner);
             command.Parameters.AddWithValue("$balance", account.Balance);
             command.Parameters.AddWithValue("$type", account.Type);
@@ -68,21 +78,22 @@ namespace BankAccount.Utils
             connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Accounts ORDER BY Number;";
+            command.CommandText = "SELECT Number, Agency, Owner, Balance, Type, [Limit], Anniversary FROM Accounts ORDER BY Number;";
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
                 int number = reader.GetInt32(0);
-                string owner = reader.GetString(1);
-                decimal balance = (decimal)reader.GetDouble(2);
-                int type = reader.GetInt32(3);
-                decimal limit = (decimal)reader.GetDouble(4);
-                int anniversary = reader.GetInt32(5);
+                string agency = reader.GetString(1);
+                string owner = reader.GetString(2);
+                decimal balance = (decimal)reader.GetDouble(3);
+                int type = reader.GetInt32(4);
+                decimal limit = (decimal)reader.GetDouble(5);
+                int anniversary = reader.GetInt32(6);
 
                 Account account = type == 1
-                    ? new CheckingAccount(owner, balance, limit)
-                    : new SavingsAccount(owner, balance, anniversary);
+                    ? new CheckingAccount(owner, balance, limit, agency)
+                    : new SavingsAccount(owner, balance, anniversary, agency);
 
                 account.SetNumber(number);
                 accounts.Add(account);
