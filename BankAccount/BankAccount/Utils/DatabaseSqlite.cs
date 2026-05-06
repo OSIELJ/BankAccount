@@ -26,10 +26,12 @@ namespace BankAccount.Utils
                 );";
             command.ExecuteNonQuery();
 
+            // Adds missing columns to existing databases without breaking them
             TryAddColumn(connection, "Agency", "TEXT NOT NULL DEFAULT '001'");
             TryAddColumn(connection, "PasswordHash", "TEXT NOT NULL DEFAULT ''");
         }
 
+        // SQLite doesn't support IF NOT EXISTS on ALTER TABLE — try/catch is the standard approach
         private static void TryAddColumn(SqliteConnection connection, string column, string definition)
         {
             try
@@ -47,6 +49,7 @@ namespace BankAccount.Utils
             connection.Open();
 
             var command = connection.CreateCommand();
+            // INSERT OR REPLACE updates the row if the primary key already exists
             command.CommandText = @"
                 INSERT OR REPLACE INTO Accounts 
                     (Number, Agency, Owner, Balance, Type, [Limit], Anniversary, PasswordHash)
@@ -86,6 +89,7 @@ namespace BankAccount.Utils
             connection.Open();
 
             var command = connection.CreateCommand();
+            // Explicit column names instead of SELECT * to avoid index-based bugs if schema changes
             command.CommandText = "SELECT Number, Agency, Owner, Balance, Type, [Limit], Anniversary, PasswordHash FROM Accounts ORDER BY Number;";
 
             using var reader = command.ExecuteReader();
@@ -105,6 +109,7 @@ namespace BankAccount.Utils
                     : new SavingsAccount(owner, balance, anniversary, agency);
 
                 account.SetNumber(number);
+                // Restores the hash directly — avoids rehashing an already hashed value
                 account.SetPasswordHash(passwordHash);
                 accounts.Add(account);
             }

@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="BankAccount.Tests/BankAccount.Tests.csproj" Id="2bebd46e-5dfd-4e92-aef0-3089dfdb7c65" />
+  <Project Path="BankAccount.Tests/BankAccount.Tests.csproj" Id="2bebd46e-5dfd-4e92-aef0-3089dfdb7c65">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="BankAccount/BankAccount.csproj" />
 </Solution>

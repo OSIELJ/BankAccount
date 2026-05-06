@@ -6,7 +6,10 @@ namespace BankAccount.Models
     {
         private static int _nextNumber = 1;
 
+        // Ensures account numbers are restored correctly after loading from database
         public static void SetNextNumber(int next) => _nextNumber = next;
+
+        // Allows restoring the exact number saved in the database
         public void SetNumber(int number) => Number = number;
 
         public int Number { get; private set; }
@@ -28,18 +31,15 @@ namespace BankAccount.Models
 
         public void SetPassword(string password)
         {
+            // SHA256 is one-way — impossible to reverse to the original password
             PasswordHash = HashPassword(password);
         }
 
-        public void SetPasswordHash(string hash)
-        {
-            PasswordHash = hash;
-        }
+        // Used when loading from database — hash is already computed, no need to rehash
+        public void SetPasswordHash(string hash) => PasswordHash = hash;
 
-        public bool ValidatePassword(string password)
-        {
-            return PasswordHash == HashPassword(password);
-        }
+        public bool ValidatePassword(string password) =>
+            PasswordHash == HashPassword(password);
 
         private static string HashPassword(string password)
         {

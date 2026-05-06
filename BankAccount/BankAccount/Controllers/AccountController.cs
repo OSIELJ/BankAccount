@@ -12,9 +12,12 @@ namespace BankAccount.Controllers
         {
             DatabaseSqlite.Initialize();
             _accounts = DatabaseSqlite.LoadAll();
+
+            // Ensures new accounts don't reuse numbers already in the database
             if (_accounts.Count > 0)
                 Account.SetNextNumber(_accounts.Max(a => a.Number) + 1);
         }
+
         public void Create(Account account)
         {
             _accounts.Add(account);
@@ -34,10 +37,8 @@ namespace BankAccount.Controllers
                 Console.WriteLine(account);
         }
 
-        public Account? FindByNumber(int number)
-        {
-            return _accounts.FirstOrDefault(a => a.Number == number);
-        }
+        public Account? FindByNumber(int number) =>
+            _accounts.FirstOrDefault(a => a.Number == number);
 
         public void Update(Account account)
         {
@@ -79,6 +80,10 @@ namespace BankAccount.Controllers
 
         public bool Transfer(int originNumber, int destinyNumber, decimal amount)
         {
+            // Prevents transferring to the same account
+            if (originNumber == destinyNumber)
+            { Console.WriteLine(Language.SameAccount); return false; }
+
             var origin = FindByNumber(originNumber);
             var destiny = FindByNumber(destinyNumber);
             if (origin == null || destiny == null)

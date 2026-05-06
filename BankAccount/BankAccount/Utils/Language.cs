@@ -171,6 +171,9 @@
         public static string InvalidOption => Current == AppLanguage.PTBR
             ? "Opção inválida."
             : "Invalid option.";
+        public static string SameAccount => Current == AppLanguage.PTBR
+            ? "Conta origem e destino não podem ser iguais."
+            : "Origin and destiny accounts cannot be the same.";
         public static string Goodbye => Current == AppLanguage.PTBR
             ? "\nAté logo!"
             : "\nGoodbye!";

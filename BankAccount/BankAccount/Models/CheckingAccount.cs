@@ -14,6 +14,7 @@ namespace BankAccount.Models
 
         public override bool Withdraw(decimal amount)
         {
+            // Checking account can go negative up to the credit limit
             if (amount <= 0 || amount > (Balance + Limit)) return false;
             Balance -= amount;
             return true;

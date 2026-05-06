@@ -4,6 +4,7 @@ namespace BankAccount.Models
 {
     public class SavingsAccount : Account
     {
+        // Anniversary day is when the account yields interest (managed externally)
         public int Anniversary { get; set; }
 
         public SavingsAccount(string owner, decimal initialBalance, int anniversary = 30, string agency = "001", string password = "1234")

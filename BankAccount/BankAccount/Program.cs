@@ -203,6 +203,7 @@ while (running)
             }
             else
             {
+                // Reverts in-memory change if user cancels
                 updAccount.Owner = originalOwner;
                 Colors.Red(Language.OperationCancelled);
             }
