@@ -24,6 +24,7 @@
             Console.ResetColor();
         }
 
+        // Hides input characters with * to protect sensitive data like passwords
         public static string ReadPassword()
         {
             string password = "";

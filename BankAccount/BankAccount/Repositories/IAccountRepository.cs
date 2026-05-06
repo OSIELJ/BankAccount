@@ -1,10 +1,8 @@
 ﻿using BankAccount.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankAccount.Repositories
 {
+    // Contract that defines all operations available in the system
     public interface IAccountRepository
     {
         void Create(Account account);
