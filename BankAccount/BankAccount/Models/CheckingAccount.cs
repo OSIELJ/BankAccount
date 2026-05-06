@@ -6,8 +6,8 @@ namespace BankAccount.Models
     {
         public decimal Limit { get; set; }
 
-        public CheckingAccount(string owner, decimal initialBalance, decimal limit = 1000, string agency = "001")
-            : base(owner, initialBalance, 1, agency)
+        public CheckingAccount(string owner, decimal initialBalance, decimal limit = 1000, string agency = "001", string password = "1234")
+            : base(owner, initialBalance, 1, agency, password)
         {
             Limit = limit;
         }

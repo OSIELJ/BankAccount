@@ -6,8 +6,8 @@ namespace BankAccount.Models
     {
         public int Anniversary { get; set; }
 
-        public SavingsAccount(string owner, decimal initialBalance, int anniversary = 30, string agency = "001")
-            : base(owner, initialBalance, 2, agency)
+        public SavingsAccount(string owner, decimal initialBalance, int anniversary = 30, string agency = "001", string password = "1234")
+            : base(owner, initialBalance, 2, agency, password)
         {
             Anniversary = anniversary;
         }

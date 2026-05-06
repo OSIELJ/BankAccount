@@ -40,9 +40,14 @@ while (running)
             decimal ccBalance = decimal.TryParse(Console.ReadLine(), out var cb) ? cb : 0;
             Console.Write(Language.LimitDefault);
             decimal ccLimit = decimal.TryParse(Console.ReadLine(), out var cl) ? cl : 1000;
+            Console.Write(Language.CreatePassword);
+            string ccPass = Colors.ReadPassword();
+            Console.Write(Language.ConfirmPassword);
+            string ccPassConfirm = Colors.ReadPassword();
+            if (ccPass != ccPassConfirm) { Colors.Red(Language.PasswordMismatch); break; }
             Console.Write(Language.ConfirmCreate);
             if ((Console.ReadLine() ?? "").ToUpper() is "S" or "Y")
-                controller.Create(new CheckingAccount(ccOwner, ccBalance, ccLimit, ccAgency));
+                controller.Create(new CheckingAccount(ccOwner, ccBalance, ccLimit, ccAgency, ccPass));
             else Colors.Red(Language.OperationCancelled);
             break;
 
@@ -56,9 +61,14 @@ while (running)
             string saOwner = Console.ReadLine() ?? "";
             Console.Write(Language.InitialBalance);
             decimal saBalance = decimal.TryParse(Console.ReadLine(), out var sb) ? sb : 0;
+            Console.Write(Language.CreatePassword);
+            string saPass = Colors.ReadPassword();
+            Console.Write(Language.ConfirmPassword);
+            string saPassConfirm = Colors.ReadPassword();
+            if (saPass != saPassConfirm) { Colors.Red(Language.PasswordMismatch); break; }
             Console.Write(Language.ConfirmCreate);
             if ((Console.ReadLine() ?? "").ToUpper() is "S" or "Y")
-                controller.Create(new SavingsAccount(saOwner, saBalance, agency: saAgency));
+                controller.Create(new SavingsAccount(saOwner, saBalance, agency: saAgency, password: saPass));
             else Colors.Red(Language.OperationCancelled);
             break;
 
@@ -86,6 +96,9 @@ while (running)
             var depAcc = controller.FindByNumber(depNum);
             if (depAcc == null) { Colors.Red(Language.AccountNotFound); break; }
             Colors.Yellow(depAcc.ToString()!);
+            Console.Write(Language.EnterPassword);
+            string depPass = Colors.ReadPassword();
+            if (!depAcc.ValidatePassword(depPass)) { Colors.Red(Language.WrongPassword); break; }
             Console.Write(Language.Amount);
             decimal depAmt = decimal.TryParse(Console.ReadLine(), out var da) ? da : 0;
             Console.Write(Language.ConfirmDeposit);
@@ -105,6 +118,9 @@ while (running)
             var witAcc = controller.FindByNumber(witNum);
             if (witAcc == null) { Colors.Red(Language.AccountNotFound); break; }
             Colors.Yellow(witAcc.ToString()!);
+            Console.Write(Language.EnterPassword);
+            string witPass = Colors.ReadPassword();
+            if (!witAcc.ValidatePassword(witPass)) { Colors.Red(Language.WrongPassword); break; }
             Console.Write(Language.Amount);
             decimal witAmt = decimal.TryParse(Console.ReadLine(), out var wa) ? wa : 0;
             Console.Write(Language.ConfirmWithdraw);
@@ -124,6 +140,9 @@ while (running)
             var oriAcc = controller.FindByNumber(oriNum);
             if (oriAcc == null) { Colors.Red(Language.AccountNotFound); break; }
             Colors.Yellow(oriAcc.ToString()!);
+            Console.Write(Language.EnterPassword);
+            string oriPass = Colors.ReadPassword();
+            if (!oriAcc.ValidatePassword(oriPass)) { Colors.Red(Language.WrongPassword); break; }
             Console.Write(Language.DestinyAccount);
             int desNum = int.TryParse(Console.ReadLine(), out var den) ? den : 0;
             var desAcc = controller.FindByNumber(desNum);
@@ -151,6 +170,9 @@ while (running)
             var accToDelete = controller.FindByNumber(delNum);
             if (accToDelete == null) { Colors.Red(Language.AccountNotFound); break; }
             Colors.Yellow(accToDelete.ToString()!);
+            Console.Write(Language.EnterPassword);
+            string delPass = Colors.ReadPassword();
+            if (!accToDelete.ValidatePassword(delPass)) { Colors.Red(Language.WrongPassword); break; }
             Console.Write(Language.ConfirmDelete);
             if ((Console.ReadLine() ?? "").ToUpper() is "S" or "Y")
                 controller.Delete(delNum);
@@ -165,6 +187,9 @@ while (running)
             var updAccount = controller.FindByNumber(updNum);
             if (updAccount == null) { Colors.Red(Language.AccountNotFound); break; }
             Colors.Green(updAccount.ToString()!);
+            Console.Write(Language.EnterPassword);
+            string updPass = Colors.ReadPassword();
+            if (!updAccount.ValidatePassword(updPass)) { Colors.Red(Language.WrongPassword); break; }
             Console.Write(Language.NewOwnerName);
             string newOwner = Console.ReadLine() ?? "";
             string originalOwner = updAccount.Owner;

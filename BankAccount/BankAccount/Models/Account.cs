@@ -14,14 +14,39 @@ namespace BankAccount.Models
         public string Owner { get; set; }
         public decimal Balance { get; protected set; }
         public int Type { get; protected set; }
+        public string PasswordHash { get; private set; } = string.Empty;
 
-        protected Account(string owner, decimal initialBalance, int type, string agency = "001")
+        protected Account(string owner, decimal initialBalance, int type, string agency = "001", string password = "1234")
         {
             Number = _nextNumber++;
             Agency = agency;
             Owner = owner;
             Balance = initialBalance;
             Type = type;
+            SetPassword(password);
+        }
+
+        public void SetPassword(string password)
+        {
+            PasswordHash = HashPassword(password);
+        }
+
+        public void SetPasswordHash(string hash)
+        {
+            PasswordHash = hash;
+        }
+
+        public bool ValidatePassword(string password)
+        {
+            return PasswordHash == HashPassword(password);
+        }
+
+        private static string HashPassword(string password)
+        {
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToHexString(hash).ToLower();
         }
 
         public virtual bool Deposit(decimal amount)

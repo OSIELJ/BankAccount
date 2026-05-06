@@ -178,6 +178,29 @@
             ? "Nenhuma conta encontrada."
             : "No accounts found.";
 
+        // Password
+        public static string EnterPassword => Current == AppLanguage.PTBR
+            ? "Senha: "
+            : "Password: ";
+        public static string NewPassword => Current == AppLanguage.PTBR
+            ? "Nova senha: "
+            : "New password: ";
+        public static string ConfirmPassword => Current == AppLanguage.PTBR
+            ? "Confirme a senha: "
+            : "Confirm password: ";
+        public static string WrongPassword => Current == AppLanguage.PTBR
+            ? "Senha incorreta."
+            : "Wrong password.";
+        public static string PasswordChanged => Current == AppLanguage.PTBR
+            ? "Senha alterada com sucesso!"
+            : "Password changed successfully!";
+        public static string PasswordMismatch => Current == AppLanguage.PTBR
+            ? "As senhas não coincidem."
+            : "Passwords do not match.";
+        public static string CreatePassword => Current == AppLanguage.PTBR
+            ? "Crie uma senha para a conta: "
+            : "Create a password for the account: ";
+
         // Language selection
         public static string SelectLanguage => Current == AppLanguage.PTBR
             ? "=== Selecionar Idioma ==="
