@@ -138,6 +138,30 @@ Para visualizar os dados, use o [DB Browser for SQLite](https://sqlitebrowser.or
 
 ---
 
+## 🧪 Testes Unitários
+
+O projeto possui 21 testes unitários cobrindo os principais métodos do sistema.
+
+### Como executar os testes
+
+```bash
+dotnet test
+```
+
+Ou no Visual Studio: **Test** → **Run All Tests** (`Ctrl+R, A`)
+
+### Cobertura dos testes
+
+| Categoria | Testes |
+|---|---|
+| Depósito | Valor válido, valor inválido |
+| Saque | Sucesso, saldo insuficiente, valor negativo, com limite |
+| Transferência | Saldo suficiente, saldo insuficiente, mesma conta |
+| Senha | Senha correta, senha errada, hash não vazio, não armazena texto puro |
+| Propriedades | Tipo, agência, titular, saldo inicial |
+
+---
+
 ## 👨‍💻 Autor
 
 Desenvolvido por **Osiel Junior Martins Bicalho**

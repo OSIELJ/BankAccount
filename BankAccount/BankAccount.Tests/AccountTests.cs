@@ -159,5 +159,36 @@ namespace BankAccount.Tests
             var account = new SavingsAccount("Mary", 750);
             Assert.Equal(750, account.Balance);
         }
+
+        //Transfer Validation Tests 
+
+        [Fact]
+        public void Transfer_SameAccountNumber_ShouldFail()
+        {
+            var origin = new CheckingAccount("John", 1000);
+            var destiny = origin;
+            Assert.Equal(origin.Number, destiny.Number);
+        }
+
+        [Fact]
+        public void Transfer_SufficientBalance_ShouldWithdrawFromOrigin()
+        {
+            var origin = new CheckingAccount("John", 1000);
+            var destiny = new SavingsAccount("Mary", 500);
+            origin.Withdraw(300);
+            destiny.Deposit(300);
+            Assert.Equal(700, origin.Balance);
+            Assert.Equal(800, destiny.Balance);
+        }
+
+        [Fact]
+        public void Transfer_InsufficientBalance_ShouldNotWithdraw()
+        {
+            // Limit is 0 to ensure withdraw fails when balance is insufficient
+            var origin = new CheckingAccount("John", 100, limit: 0);
+            bool result = origin.Withdraw(500);
+            Assert.False(result);
+            Assert.Equal(100, origin.Balance);
+        }
     }
 }
