@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BankAccount.Utils
+﻿namespace BankAccount.Utils
 {
     public static class Colors
     {
@@ -26,6 +22,28 @@ namespace BankAccount.Utils
             Console.ForegroundColor = color;
             Console.WriteLine(text);
             Console.ResetColor();
+        }
+
+        public static string ReadPassword()
+        {
+            string password = "";
+            ConsoleKeyInfo key;
+            do
+            {
+                key = Console.ReadKey(intercept: true);
+                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (key.Key != ConsoleKey.Enter && key.Key != ConsoleKey.Backspace)
+                {
+                    password += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+            Console.WriteLine();
+            return password;
         }
     }
 }

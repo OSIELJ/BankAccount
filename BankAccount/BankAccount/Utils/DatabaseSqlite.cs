@@ -15,21 +15,28 @@ namespace BankAccount.Utils
             var command = connection.CreateCommand();
             command.CommandText = @"
                 CREATE TABLE IF NOT EXISTS Accounts (
-                    Number      INTEGER PRIMARY KEY,
-                    Agency      TEXT NOT NULL DEFAULT '001',
-                    Owner       TEXT NOT NULL,
-                    Balance     REAL NOT NULL,
-                    Type        INTEGER NOT NULL,
-                    [Limit]     REAL NOT NULL DEFAULT 0,
-                    Anniversary INTEGER NOT NULL DEFAULT 0
+                    Number       INTEGER PRIMARY KEY,
+                    Agency       TEXT NOT NULL DEFAULT '001',
+                    Owner        TEXT NOT NULL,
+                    Balance      REAL NOT NULL,
+                    Type         INTEGER NOT NULL,
+                    [Limit]      REAL NOT NULL DEFAULT 0,
+                    Anniversary  INTEGER NOT NULL DEFAULT 0,
+                    PasswordHash TEXT NOT NULL DEFAULT ''
                 );";
             command.ExecuteNonQuery();
 
+            TryAddColumn(connection, "Agency", "TEXT NOT NULL DEFAULT '001'");
+            TryAddColumn(connection, "PasswordHash", "TEXT NOT NULL DEFAULT ''");
+        }
+
+        private static void TryAddColumn(SqliteConnection connection, string column, string definition)
+        {
             try
             {
-                var alter = connection.CreateCommand();
-                alter.CommandText = "ALTER TABLE Accounts ADD COLUMN Agency TEXT NOT NULL DEFAULT '001';";
-                alter.ExecuteNonQuery();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = $"ALTER TABLE Accounts ADD COLUMN {column} {definition};";
+                cmd.ExecuteNonQuery();
             }
             catch { }
         }
@@ -42,9 +49,9 @@ namespace BankAccount.Utils
             var command = connection.CreateCommand();
             command.CommandText = @"
                 INSERT OR REPLACE INTO Accounts 
-                    (Number, Agency, Owner, Balance, Type, [Limit], Anniversary)
+                    (Number, Agency, Owner, Balance, Type, [Limit], Anniversary, PasswordHash)
                 VALUES 
-                    ($number, $agency, $owner, $balance, $type, $limit, $anniversary);";
+                    ($number, $agency, $owner, $balance, $type, $limit, $anniversary, $passwordHash);";
 
             command.Parameters.AddWithValue("$number", account.Number);
             command.Parameters.AddWithValue("$agency", account.Agency);
@@ -55,6 +62,7 @@ namespace BankAccount.Utils
                 account is CheckingAccount ca ? ca.Limit : 0);
             command.Parameters.AddWithValue("$anniversary",
                 account is SavingsAccount sa ? sa.Anniversary : 0);
+            command.Parameters.AddWithValue("$passwordHash", account.PasswordHash);
 
             command.ExecuteNonQuery();
         }
@@ -78,7 +86,7 @@ namespace BankAccount.Utils
             connection.Open();
 
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Number, Agency, Owner, Balance, Type, [Limit], Anniversary FROM Accounts ORDER BY Number;";
+            command.CommandText = "SELECT Number, Agency, Owner, Balance, Type, [Limit], Anniversary, PasswordHash FROM Accounts ORDER BY Number;";
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
@@ -90,12 +98,14 @@ namespace BankAccount.Utils
                 int type = reader.GetInt32(4);
                 decimal limit = (decimal)reader.GetDouble(5);
                 int anniversary = reader.GetInt32(6);
+                string passwordHash = reader.GetString(7);
 
                 Account account = type == 1
                     ? new CheckingAccount(owner, balance, limit, agency)
                     : new SavingsAccount(owner, balance, anniversary, agency);
 
                 account.SetNumber(number);
+                account.SetPasswordHash(passwordHash);
                 accounts.Add(account);
             }
 
