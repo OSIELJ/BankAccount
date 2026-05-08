@@ -6,7 +6,7 @@ Sistema de gerenciamento de contas bancárias desenvolvido em C# com .NET 10, ap
 
 ## 📋 Sobre o Projeto
 
-O BankAccount é um sistema de console interativo que simula operações bancárias básicas. Desenvolvido como projeto do primeiro projeto do Acelera Maker, aplica os princípios de POO como herança, abstração, encapsulamento e polimorfismo.
+O BankAccount é um sistema de console interativo que simula operações bancárias básicas. Desenvolvido como primeiro projeto do Acelera Maker, aplica os princípios de POO como herança, abstração, encapsulamento e polimorfismo.
 
 ---
 
