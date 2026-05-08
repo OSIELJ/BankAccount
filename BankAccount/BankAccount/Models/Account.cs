@@ -14,6 +14,8 @@ namespace BankAccount.Models
 
         public int Number { get; private set; }
         public string Agency { get; set; }
+        
+        // "Owner" was chosen over "Holder(titular)" for better readability and industry convention
         public string Owner { get; set; }
         public decimal Balance { get; protected set; }
         public int Type { get; protected set; }
